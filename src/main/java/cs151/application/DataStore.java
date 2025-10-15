@@ -14,12 +14,19 @@ public final class DataStore {
     private static final ObservableList<ProgrammingLanguages> LIST =
             FXCollections.observableArrayList();
 
+    private static final ObservableList<StudentProfile> NAME =
+            FXCollections.observableArrayList();
+
     private static boolean loadedOnce = false;
 
     private DataStore() {}
 
     public static ObservableList<ProgrammingLanguages> getList() {
         return LIST;
+    }
+
+    public static ObservableList<StudentProfile> getFullName() {
+        return NAME;
     }
 
     public static void load() {
@@ -31,9 +38,9 @@ public final class DataStore {
         try (BufferedReader br = Files.newBufferedReader(DATA_FILE, StandardCharsets.UTF_8)) {
             String line = br.readLine();
             if (line == null) return;
-            if (!line.startsWith("fullName,")) {
+           /* if (!line.startsWith("fullName,")) {
                 parseLineIntoList(line);
-            }
+            }*/
             String row;
             while ((row = br.readLine()) != null) {
                 parseLineIntoList(row);
@@ -48,12 +55,12 @@ public final class DataStore {
             if (!Files.exists(DATA_DIR)) Files.createDirectories(DATA_DIR);
             try (BufferedWriter bw = Files.newBufferedWriter(DATA_FILE, StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
-                bw.write("fullName,programmingLanguage");
+                bw.write("programmingLanguage");
                 bw.newLine();
 
                 for (ProgrammingLanguages pl : LIST) {
-                   // bw.write(csv(pl.getFullName()));
-                   // bw.write(',');
+                  //  bw.write(csv(pl.getFullName()));
+                    //bw.write(',');
                     bw.write(csv(pl.getProgrammingLanguage()));
                     bw.newLine();
                 }
@@ -73,9 +80,9 @@ public final class DataStore {
     private static void parseLineIntoList(String line) {
         String[] cols = parseCsvLine(line, 2);
         if (cols == null) return;
-        String name = cols[0];
+        //String name = cols[0];
         String lang = cols[1];
-        if (!name.isEmpty() || !lang.isEmpty()) {
+        if (/*!name.isEmpty() || */!lang.isEmpty()) {
             LIST.add(new ProgrammingLanguages(lang));
         }
     }

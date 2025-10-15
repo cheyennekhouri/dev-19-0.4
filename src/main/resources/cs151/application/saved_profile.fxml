@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -12,11 +15,12 @@
           AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
           AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
 
-        <TableView fx:id="tableView" prefHeight="280.0" prefWidth="560.0">
+        <TableView fx:id="nameTable" prefHeight="280.0" prefWidth="560.0">
             <columns>
-                <TableColumn fx:id="langCol" text="Programming Language" prefWidth="280.0"/>
+                <TableColumn fx:id="nameCol" text="Student Profiles" prefWidth="280.0"/>
             </columns>
         </TableView>
-        <Button text="Back to Programming Languages" onAction="#programmingLang"/>
+
+        <Button text="Back to Profile" onAction="#studentProfile"/>
     </VBox>
 </AnchorPane>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -9,15 +12,15 @@
       spacing="12" alignment="CENTER"
       prefWidth="360" prefHeight="320">
 
-    <Label text="KnowledgeTrack: Programming Languages Page" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    <Label text="KnowledgeTrack: Student Profile Page" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
 
-    <Label text="Define Programming Language:"/>
-    <TextField fx:id="languageField" promptText="Enter primary language" maxWidth="260"/>
+    <Label text="Enter Full Name:"/>
+    <TextField fx:id="nameField" promptText="Enter student name" maxWidth="260"/>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button text="Save" onAction="#onSave"/>
+        <Button text="Save" onAction="#save"/>
         <Button text="Edit" />
-        <Button text="View Saved Languages" onAction="#programmingLanguagesTable"/>
+        <Button text="View Saved Profiles" onAction="#savedProfile"/>
         <Button text="Back to Home" onAction="#goBackToHome"/>
     </HBox>
 

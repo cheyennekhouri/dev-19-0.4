@@ -11,6 +11,6 @@
     <Label fx:id="popUp2" text="Welcome!" />
     <Label fx:id="popUp3" text="" />
 
-    <Button text="Navigate to Programming Languages"
-            onAction="#onNavigateButtonClick"/>
+    <Button text="Launch KnowledgeTrack"
+            onAction="#goBackToHome"/>
 </VBox>
