@@ -1,5 +1,17 @@
-# Name of application: 
-# Version: 0.2
+# Name of application: KnowledgeTrack
+
+# Version: 0.4
+
+# who did what:
+1. Sean Reece Calantoc: 
+2. Kanishka Yadav: 
+3. Hoang Khang Pham:
+4. Cheyenne Khouri: Reorganized how application looks, created student profile and table, sorted the profiles alphabetically?
+
+
+# Any other instruction that users need to know:
+
+# Version: 0.3
 
 # who did what:
 1. Sean Reece Calantoc: Implemented Save button on profile page

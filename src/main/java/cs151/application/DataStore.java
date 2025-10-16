@@ -78,11 +78,10 @@ public final class DataStore {
     }
 
     private static void parseLineIntoList(String line) {
-        String[] cols = parseCsvLine(line, 2);
+        String[] cols = parseCsvLine(line, 1);
         if (cols == null) return;
-        //String name = cols[0];
-        String lang = cols[1];
-        if (/*!name.isEmpty() || */!lang.isEmpty()) {
+        String lang = cols[0];
+        if (!lang.isEmpty()) {
             LIST.add(new ProgrammingLanguages(lang));
         }
     }
