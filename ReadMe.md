@@ -4,10 +4,9 @@
 
 # who did what:
 1. Sean Reece Calantoc: 
-2. Kanishka Yadav: 
+2. Kanishka Yadav: Fixated StudentProfile.java (name, major, languages)
 3. Hoang Khang Pham:
-4. Cheyenne Khouri: Reorganized how application looks, created student profile and table, sorted the profiles alphabetically?
-
+4. Cheyenne Khouri: Reorganized how application looks, created student profile and table, sorted the profiles alphabetically
 
 # Any other instruction that users need to know:
 
@@ -19,6 +18,13 @@
 3. Hoang Khang Pham: Debug and fixed the Data table display, Implemented function to store users data using csv file
 4. Cheyenne Khouri: Programming languages table, Sorting languages alphabetically
 
+# Version: 0.2
+
+# who did what:
+1. Sean Reece Calantoc: Designed the Profile Page with text fields and navigation buttons
+2. Kanishka Yadav: Implemented input validation and success confirmation for the use cases
+3. Hoang Khang Pham : Fixed the clickable “Programming Languages” button and created the Programming Languages page, including a back button to return to the homepage.
+4. Cheyenne Khouri: Set up homepage once the app is launched, setting up buttons to navigate to define programming languages
 
 # Any other instruction that users need to know:
 
