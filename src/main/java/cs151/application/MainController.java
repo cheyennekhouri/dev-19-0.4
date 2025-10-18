@@ -26,8 +26,6 @@ public class MainController {
     @FXML private TableColumn<ProgrammingLanguages, String> langCol;
     @FXML private TableColumn<StudentProfile, String> nameCol;
 
-
-
     @FXML
     private void initialize() {
         if (tableView != null) {

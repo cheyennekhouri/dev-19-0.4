@@ -37,7 +37,7 @@
 
     <Label text="Select Job Status:"/>
     <RadioButton text="Employed"/>
-    <RadioButton text="Unemployed"  />
+    <RadioButton text="Unemployed" />
 
     <Label text="Job Details:"/>
     <TextField fx:id="textField" promptText="Enter your input here" visible="false" />
