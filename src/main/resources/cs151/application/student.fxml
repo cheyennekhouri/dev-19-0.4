@@ -71,7 +71,7 @@
     <CheckBox text="Blacklist Student" fx:id="blackList"/>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button text="Save" onAction="#onSave"/>
+        <Button text="Save" onAction="#save"/>
         <Button text="Edit" />
         <Button text="View Saved Profiles" onAction="#savedProfile"/>
         <Button text="Back to Home" onAction="#goBackToHome"/>

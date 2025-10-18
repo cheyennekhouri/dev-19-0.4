@@ -51,7 +51,11 @@ public class MainController {
             tableView.setItems(langs);
             langCol.prefWidthProperty().bind(tableView.widthProperty().multiply(0.5));
         }
+    }
 
+    //Sort names alphabetically (like initialize)
+    @FXML
+    private void initializeProf() {
         if (nameTable != null) {
             nameCol.setCellValueFactory(new PropertyValueFactory<>("Student Profile"));
 
@@ -62,7 +66,7 @@ public class MainController {
             fullName.sort(nameCompare);
 
             nameTable.setItems(fullName);
-            nameCol.prefWidthProperty().bind(nameTable.widthProperty().multiply(0.5));
+           nameCol.prefWidthProperty().bind(nameTable.widthProperty().multiply(0.5));
         }
     }
 
@@ -107,7 +111,11 @@ public class MainController {
             DataStore.save();
             languageField.clear();
         }
+    }
 
+    //saves profile
+    @FXML
+    private void save() {
         if (nameField == null) return;
         String name  = nameField.getText() == null ? "" : nameField.getText().trim();
         if (!name.isEmpty()) {
