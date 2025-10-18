@@ -3,7 +3,7 @@ package cs151.application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,9 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import javafx.scene.control.TextField;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.Comparator;
@@ -28,6 +25,8 @@ public class MainController {
 
     @FXML private TableColumn<ProgrammingLanguages, String> langCol;
     @FXML private TableColumn<StudentProfile, String> nameCol;
+
+
 
     @FXML
     private void initialize() {
@@ -79,7 +78,7 @@ public class MainController {
     //student profile, add name, contains: save, edit, view saved profiles, back to home
     @FXML
     protected void studentProfile(ActionEvent event) {
-        swapScene(event, "/cs151/application/student.fxml", 640, 420, "Student Profile");
+        swapScene(event, "/cs151/application/student.fxml", 600, 400, "Student Profile");
     }
     //saved profiles, contains: list of profiles, back to making student profile
     @FXML
