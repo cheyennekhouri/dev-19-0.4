@@ -27,6 +27,17 @@ public class MainController {
     @FXML private TableColumn<StudentProfile, String> nameCol;
 
     @FXML
+    private ListView<String> listView;
+
+    @FXML
+    public void initializer() {
+        ObservableList<String> items = FXCollections.observableArrayList("MySQL", "Postgres", "MongoDB");
+        listView.setItems(items);
+
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    }
+
+    @FXML
     private void initialize() {
         if (tableView != null) {
             langCol.setCellValueFactory(new PropertyValueFactory<>("programmingLanguage"));
@@ -40,10 +51,7 @@ public class MainController {
             tableView.setItems(langs);
             langCol.prefWidthProperty().bind(tableView.widthProperty().multiply(0.5));
         }
-    }
 
-    @FXML
-    private void initializeProf() {
         if (nameTable != null) {
             nameCol.setCellValueFactory(new PropertyValueFactory<>("Student Profile"));
 
@@ -54,7 +62,7 @@ public class MainController {
             fullName.sort(nameCompare);
 
             nameTable.setItems(fullName);
-           nameCol.prefWidthProperty().bind(nameTable.widthProperty().multiply(0.5));
+            nameCol.prefWidthProperty().bind(nameTable.widthProperty().multiply(0.5));
         }
     }
 
@@ -99,17 +107,13 @@ public class MainController {
             DataStore.save();
             languageField.clear();
         }
-    }
 
-    //saves profile
-    @FXML
-    private void save() {
-        if (languageField == null) return;
-        String lang  = languageField.getText() == null ? "" : languageField.getText().trim();
-        if (!lang.isEmpty()) {
-            DataStore.getList().add(new ProgrammingLanguages(lang));
+        if (nameField == null) return;
+        String name  = nameField.getText() == null ? "" : nameField.getText().trim();
+        if (!name.isEmpty()) {
+            DataStore.getFullName().add(new StudentProfile(name));
             DataStore.save();
-            languageField.clear();
+            nameField.clear();
         }
     }
 

@@ -15,7 +15,7 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       spacing="12" alignment="CENTER"
-      prefWidth="600" prefHeight="800">
+      prefWidth="600" prefHeight="1000">
 
     <Label text="KnowledgeTrack: Student Profile Page" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
 
@@ -36,17 +36,19 @@
     </ComboBox>
 
     <Label text="Select Job Status:"/>
-    <RadioButton text="Employed"/>
-    <RadioButton text="Unemployed" />
-
-    <Label text="Job Details:"/>
-    <TextField fx:id="textField" promptText="Enter your input here" visible="false" />
+    <RadioButton fx:id="toggleButton" text="Employed"/>
+    <TextField fx:id="textField" promptText="Job details" maxWidth="300" />
+    <RadioButton fx:id="toggleButton2" text="Unemployed"/>
 
     <Label text="Known Programming Languages:"/>
 
 
     <Label text="Databases Known:"/>
-
+    <ListView fx:id="multiSelectListView" layoutX="50.0" layoutY="50.0" maxHeight="150.0" maxWidth="200.0">
+        <String fx:value="MySQL" />
+        <String fx:value="Postgres" />
+        <String fx:value="MongoDB" />
+    </ListView>
 
     <Label text="Preferred Professional Role:"/>
     <ComboBox fx:id="dropDown" prefWidth="150">
@@ -63,13 +65,13 @@
     </ComboBox>
 
     <Label text="Comments:"/>
-    <TextField fx:id="commentField" promptText="Add faculty comments" maxWidth="260" maxHeight="500"/>
+    <TextArea fx:id="commentField" promptText="Add faculty comments" maxWidth="260" maxHeight="260" wrapText="true" />
 
     <CheckBox text="Whitelist Student" fx:id="whiteList"/>
     <CheckBox text="Blacklist Student" fx:id="blackList"/>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button text="Save" onAction="#save"/>
+        <Button text="Save" onAction="#onSave"/>
         <Button text="Edit" />
         <Button text="View Saved Profiles" onAction="#savedProfile"/>
         <Button text="Back to Home" onAction="#goBackToHome"/>
