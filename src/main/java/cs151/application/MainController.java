@@ -27,15 +27,19 @@ public class MainController {
     @FXML private TableColumn<StudentProfile, String> nameCol;
     @FXML private ListView<String> languagesList;
 
+    @FXML private ComboBox<String> dropdown, dropDown;
+    @FXML private RadioButton toggleButton;
+    @FXML private TextField textField;
+
     @FXML
-    private ListView<String> listView;
+    private ListView<String> multiSelectListView;
 
     @FXML
     public void initializer() {
         ObservableList<String> items = FXCollections.observableArrayList("MySQL", "Postgres", "MongoDB");
-        listView.setItems(items);
+        multiSelectListView.setItems(items);
 
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        multiSelectListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     @FXML
@@ -56,6 +60,15 @@ public class MainController {
             );
             languagesList.setItems(opts);
             languagesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        }
+        if (multiSelectListView != null) {
+            multiSelectListView.setItems(FXCollections.observableArrayList("MySQL", "Postgres", "MongoDB"));
+            multiSelectListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        }
+        if (nameTable != null && nameCol != null) {
+            nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+            nameTable.setItems(DataStore.getFullName());
+            nameCol.prefWidthProperty().bind(nameTable.widthProperty().multiply(0.95));
         }
     }
 
@@ -106,6 +119,24 @@ public class MainController {
         swapScene(event, "/cs151/application/programming_languages.fxml", 640, 420, "Programming Languages");
     }
 
+    private boolean requiredFields() {
+        String name   = nameField != null && nameField.getText() != null ? nameField.getText().trim() : "";
+        String status = dropdown  != null && dropdown.getValue() != null ? dropdown.getValue().trim() : "";
+        String role   = dropDown  != null && dropDown.getValue() != null ? dropDown.getValue().trim() : "";
+        boolean employed = toggleButton != null && toggleButton.isSelected();
+        String job    = textField != null && textField.getText() != null ? textField.getText().trim() : "";
+
+        if (name.isEmpty())   return error("Full Name is required.");
+        if (status.isEmpty()) return error("Academic Status is required.");
+        if (role.isEmpty())   return error("Preferred Professional Role is required.");
+        if (employed && job.isEmpty()) return error("Job details are required when Employed.");
+        return true;
+    }
+    private boolean error(String msg) {
+        new Alert(Alert.AlertType.ERROR, msg).showAndWait();
+        return false;
+    }
+
     //saves languages
     @FXML
     private void onSave() {
@@ -121,13 +152,29 @@ public class MainController {
     //saves profile
     @FXML
     private void save() {
-        if (nameField == null) return;
-        String name  = nameField.getText() == null ? "" : nameField.getText().trim();
-        if (!name.isEmpty()) {
-            DataStore.getFullName().add(new StudentProfile(name));
-            DataStore.save();
-            nameField.clear();
+        if (!requiredFields()) return;
+        final String name     = nameField.getText().trim();
+        final String status   = dropdown.getValue();
+        final boolean employed= toggleButton.isSelected();
+        final String job      = textField.getText().trim();
+        final String role     = dropDown.getValue();
+
+        StudentProfile target = null;
+        for (StudentProfile sp : DataStore.getFullName()) {
+            if (sp.getName() != null && sp.getName().equalsIgnoreCase(name)) {
+                target = sp; break;
+            }
         }
+        if (target == null) {
+            target = new StudentProfile(name);
+            DataStore.getFullName().add(target); // table updates immediately
+        }
+        target.setAcademicStatus(status);
+        target.setEmployeed(employed);
+        target.setJobDetails(job);
+        target.setPreferredRole(role);
+
+        DataStore.saveProfiles();
     }
 
     private void swapScene(ActionEvent event, String fxml, int w, int h, String title) {

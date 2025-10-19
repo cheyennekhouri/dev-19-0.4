@@ -60,7 +60,6 @@
                 <String fx:value="Full-stack" />
                 <String fx:value="Data" />
                 <String fx:value="Other" />
-                <TextField fx:id="otherField" maxWidth="260"/>
             </FXCollections>
         </items>
     </ComboBox>
