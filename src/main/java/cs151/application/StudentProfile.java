@@ -2,7 +2,6 @@ package cs151.application;
 import java.util.ArrayList;
 import java.util.List;
 public class StudentProfile  implements Comparable<StudentProfile> {
-
     private String name;
     private String major;
     private List<String> languages;

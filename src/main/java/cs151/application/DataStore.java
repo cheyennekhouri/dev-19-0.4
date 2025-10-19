@@ -78,7 +78,6 @@ public final class DataStore {
         String q = s.replace("\"", "\"\"");
         return "\"" + q + "\"";
     }
-
     private static void parseLineIntoList(String line) {
         String[] cols = parseCsvLine(line, 1);
         if (cols == null) return;
