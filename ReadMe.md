@@ -5,7 +5,7 @@
 # who did what:
 1. Sean Reece Calantoc: 
 2. Kanishka Yadav: Finalized StudentProfile.java with required fields
-3. Hoang Khang Pham:
+3. Hoang Khang Pham: built the main features, showing three programming languages in Student profile page.
 4. Cheyenne Khouri: Reorganized how application looks, created student profile and table, sorted the profiles alphabetically
 
 # Any other instruction that users need to know:

@@ -25,31 +25,40 @@ public class MainController {
 
     @FXML private TableColumn<ProgrammingLanguages, String> langCol;
     @FXML private TableColumn<StudentProfile, String> nameCol;
+    @FXML private ListView<String> languagesList;
 
     @FXML
-    private ListView<String> multiSelectListView;
+    private ListView<String> listView;
 
-    @FXML private ComboBox<String> dropdown, dropDown;
-    @FXML private RadioButton toggleButton;
-    @FXML private TextField textField;
+    @FXML
+    public void initializer() {
+        ObservableList<String> items = FXCollections.observableArrayList("MySQL", "Postgres", "MongoDB");
+        listView.setItems(items);
+
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    }
 
     @FXML
     private void initialize() {
-        if (tableView != null && langCol != null) {
+        if (tableView != null) {
             langCol.setCellValueFactory(new PropertyValueFactory<>("programmingLanguage"));
-            tableView.setItems(DataStore.getList());
+            ObservableList<ProgrammingLanguages> langs =
+                    FXCollections.observableArrayList(DataStore.getList());
+            langs.sort(Comparator.comparing(
+                    ProgrammingLanguages::getProgrammingLanguage, String.CASE_INSENSITIVE_ORDER));
+            tableView.setItems(langs);
+            langCol.prefWidthProperty().bind(tableView.widthProperty().multiply(0.5));
         }
-        if (nameTable != null && nameCol != null) {
-            nameCol.setCellValueFactory(new PropertyValueFactory<>("name")); // uses getName()
-            nameTable.setItems(DataStore.getFullName());
-        }
-        if (multiSelectListView != null) {
-            multiSelectListView.getItems().setAll("MySQL", "Postgres", "MongoDB");
-            multiSelectListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        if (languagesList != null) {
+            ObservableList<String> opts = FXCollections.observableArrayList(
+                    DataStore.getList().stream()
+                            .map(ProgrammingLanguages::getProgrammingLanguage).toList()
+            );
+            languagesList.setItems(opts);
+            languagesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         }
     }
 
-    //Sort names alphabetically (like initialize)
     @FXML
     private void initializeProf() {
         if (nameTable != null) {
@@ -97,26 +106,6 @@ public class MainController {
         swapScene(event, "/cs151/application/programming_languages.fxml", 640, 420, "Programming Languages");
     }
 
-    private boolean requiredFields() {
-        String name = (nameField != null && nameField.getText() != null) ? nameField.getText().trim() : "";
-        String status = (dropdown  != null && dropdown.getValue() != null) ? dropdown.getValue().trim() : "";
-        String role = (dropDown  != null && dropDown.getValue() != null) ? dropDown.getValue().trim() : "";
-        boolean employed = (toggleButton != null && toggleButton.isSelected());
-        String job = (textField != null && textField.getText() != null) ? textField.getText().trim() : "";
-
-        if (name.isEmpty()) return error("Full Name is required."); //required fields
-        if (status.isEmpty()) return error("Academic Status is required.");
-        if (role.isEmpty()) return error("Preferred Professional Role is required.");
-        if (employed && job.isEmpty()) return error("Job details are required when Employed.");
-        return true;
-
-    }
-
-    private boolean error(String msg) { //error message
-        new Alert(Alert.AlertType.ERROR, msg).showAndWait();
-        return false;
-    }
-
     //saves languages
     @FXML
     private void onSave() {
@@ -132,22 +121,13 @@ public class MainController {
     //saves profile
     @FXML
     private void save() {
-        if (!requiredFields()) return;
-        String name = nameField.getText().trim();
-        StudentProfile p = DataStore.getFullName().stream()
-                .filter(s -> s.getName() != null && s.getName().equalsIgnoreCase(name))
-                .findFirst()
-                .orElseGet(() -> {
-                    StudentProfile np = new StudentProfile(name);
-                    DataStore.getFullName().add(np);
-                    return np;
-                });
-
-        p.setAcademicStatus(dropdown.getValue());
-        p.setEmployeed(toggleButton.isSelected());
-        p.setJobDetails(textField.getText().trim());
-        p.setPreferredRole(dropDown.getValue());
-        DataStore.saveProfiles();
+        if (nameField == null) return;
+        String name  = nameField.getText() == null ? "" : nameField.getText().trim();
+        if (!name.isEmpty()) {
+            DataStore.getFullName().add(new StudentProfile(name));
+            DataStore.save();
+            nameField.clear();
+        }
     }
 
     private void swapScene(ActionEvent event, String fxml, int w, int h, String title) {

@@ -9,7 +9,7 @@ import java.nio.file.*;
 import java.util.List;
 
 public final class DataStore {
-    private static final Path DATA_DIR  = Paths.get(System.getProperty("user.home"), ".knowledgetrack");
+    private static final Path DATA_DIR = Paths.get(System.getProperty("user.home"), ".knowledgetrack");
     private static final Path DATA_FILE = DATA_DIR.resolve("languages.csv");
     private static final Path PROFILE_FILE = DATA_DIR.resolve("profiles.csv");
 
@@ -21,7 +21,8 @@ public final class DataStore {
 
     private static boolean loadedOnce = false;
 
-    private DataStore() {}
+    private DataStore() {
+    }
 
     public static ObservableList<ProgrammingLanguages> getList() {
         return LIST;
@@ -31,18 +32,31 @@ public final class DataStore {
         return NAME;
     }
 
+    private static void seedDefaultLanguagesIfAbsent() {
+        if (Files.exists(DATA_FILE)) return;
+        LIST.setAll(
+                new ProgrammingLanguages("Java"),
+                new ProgrammingLanguages("Python"),
+                new ProgrammingLanguages("C++")
+        );
+        save();
+    }
+
     public static void load() {
         if (loadedOnce) return;
         loadedOnce = true;
 
-        if (!Files.exists(DATA_FILE)) return;
+        try {
+            if (!Files.exists(DATA_DIR)) Files.createDirectories(DATA_DIR);
+        } catch (IOException ignored) {
+        }
+        seedDefaultLanguagesIfAbsent();
 
+        LIST.clear();
         try (BufferedReader br = Files.newBufferedReader(DATA_FILE, StandardCharsets.UTF_8)) {
-            String line = br.readLine();
-            if (line == null) return;
-           /* if (!line.startsWith("fullName,")) {
-                parseLineIntoList(line);
-            }*/
+            String header = br.readLine();
+            if (header == null) return;
+
             String row;
             while ((row = br.readLine()) != null) {
                 parseLineIntoList(row);
@@ -78,6 +92,7 @@ public final class DataStore {
         String q = s.replace("\"", "\"\"");
         return "\"" + q + "\"";
     }
+
     private static void parseLineIntoList(String line) {
         String[] cols = parseCsvLine(line, 1);
         if (cols == null) return;
@@ -87,7 +102,6 @@ public final class DataStore {
         }
     }
 
-    // simple CSV parser for 2 columns with optional quotes/commas
     private static String[] parseCsvLine(String line, int expectedCols) {
         if (line == null) return null;
         String[] out = new String[expectedCols];
@@ -99,7 +113,6 @@ public final class DataStore {
             char c = line.charAt(i);
             if (inQuotes) {
                 if (c == '"') {
-                    // lookahead for escaped quote
                     if (i + 1 < line.length() && line.charAt(i + 1) == '"') {
                         sb.append('"');
                         i++;
@@ -128,10 +141,29 @@ public final class DataStore {
     public static void saveProfiles() {
         try {
             if (!Files.exists(DATA_DIR)) Files.createDirectories(DATA_DIR);
-            try (BufferedWriter bw = Files.newBufferedWriter(PROFILE_FILE, StandardCharsets.UTF_8,
+            try (BufferedWriter bw = Files.newBufferedWriter(
+                    PROFILE_FILE, StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+
+                // header (10 columns)
+                bw.write(String.join(",", "name", "major", "academicStatus", "employment",
+                        "jobDetails", "languages", "preferredRole", "comments", "whiteList", "blackList"));
+                bw.newLine();
+
                 for (StudentProfile sp : NAME) {
-                    bw.write(sp.toString());
+                    String line = String.join(",",
+                            csv(sp.getName()),
+                            csv(sp.getMajor()),
+                            csv(sp.getAcademicStatus()),
+                            csv(sp.isEmployed() ? "Employed" : "Not Employed"),
+                            csv(sp.getJobDetails()),
+                            csv(String.join("|", sp.getLanguages())),
+                            csv(sp.getPreferredRole()),
+                            csv(sp.getComments()),
+                            csv(Boolean.toString(sp.isWhiteList())),
+                            csv(Boolean.toString(sp.isBlackList()))
+                    );
+                    bw.write(line);
                     bw.newLine();
                 }
             }
@@ -139,27 +171,31 @@ public final class DataStore {
             e.printStackTrace();
         }
     }
+
     public static void loadProfiles() {
         NAME.clear();
         if (!Files.exists(PROFILE_FILE)) return;
 
         try (BufferedReader br = Files.newBufferedReader(PROFILE_FILE, StandardCharsets.UTF_8)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // expected 10 fields in CSV format
-                String[] parts = line.split(",", 10);
-                if (parts.length == 10) {
-                    List<String> langs = List.of(parts[5].split("\\|"));
-                    StudentProfile sp = new StudentProfile(parts[0], parts[1], langs);
-                    sp.setAcademicStatus(parts[2]);
-                    sp.setEmployeed("Employed".equalsIgnoreCase(parts[3]));
-                    sp.setJobDetails(parts[4]);
-                    sp.setPreferredRole(parts[6]);
-                    sp.setComments(parts[7]);
-                    sp.setWhiteList(Boolean.parseBoolean(parts[8]));
-                    sp.setBlackList(Boolean.parseBoolean(parts[9]));
-                    NAME.add(sp);
-                }
+            br.readLine(); // skip header
+            for (String row; (row = br.readLine()) != null; ) {
+                String[] c = parseCsvLine(row, 10);
+                if (c == null) continue;
+
+                StudentProfile sp = new StudentProfile(
+                        c[0],
+                        c[1],
+                        c[5].isEmpty() ? List.of() : List.of(c[5].split("\\|")) // languages
+                );
+                sp.setAcademicStatus(c[2]);
+                sp.setEmployeed("Employed".equalsIgnoreCase(c[3]));
+                sp.setJobDetails(c[4]);
+                sp.setPreferredRole(c[6]);
+                sp.setComments(c[7]);
+                sp.setWhiteList(Boolean.parseBoolean(c[8]));
+                sp.setBlackList(Boolean.parseBoolean(c[9]));
+
+                NAME.add(sp);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -41,6 +41,7 @@
     <RadioButton fx:id="toggleButton2" text="Unemployed"/>
 
     <Label text="Known Programming Languages:"/>
+    <ListView fx:id="languagesList"  layoutX="50.0" layoutY="50.0" maxHeight="150.0" maxWidth="200.0"/>
 
 
     <Label text="Databases Known:"/>
