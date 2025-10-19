@@ -3,7 +3,7 @@
 # Version: 0.4
 
 # who did what:
-1. Sean Reece Calantoc: 
+1. Sean Reece Calantoc: Added required field validation in StudentProfile and MainController
 2. Kanishka Yadav: Finalized StudentProfile.java with required fields
 3. Hoang Khang Pham: built the main features, showing three programming languages in Student profile page.
 4. Cheyenne Khouri: Reorganized how application looks, created student profile and table, sorted the profiles alphabetically
