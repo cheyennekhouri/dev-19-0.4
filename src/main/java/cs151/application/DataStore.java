@@ -6,10 +6,12 @@ import javafx.collections.ObservableList;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.util.List;
 
 public final class DataStore {
     private static final Path DATA_DIR  = Paths.get(System.getProperty("user.home"), ".knowledgetrack");
     private static final Path DATA_FILE = DATA_DIR.resolve("languages.csv");
+    private static final Path PROFILE_FILE = DATA_DIR.resolve("profiles.csv");
 
     private static final ObservableList<ProgrammingLanguages> LIST =
             FXCollections.observableArrayList();
@@ -122,5 +124,46 @@ public final class DataStore {
         if (idx < expectedCols) out[idx++] = sb.toString();
         if (idx != expectedCols) return null;
         return out;
+    }
+
+    public static void saveProfiles() {
+        try {
+            if (!Files.exists(DATA_DIR)) Files.createDirectories(DATA_DIR);
+            try (BufferedWriter bw = Files.newBufferedWriter(PROFILE_FILE, StandardCharsets.UTF_8,
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+                for (StudentProfile sp : NAME) {
+                    bw.write(sp.toString());
+                    bw.newLine();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void loadProfiles() {
+        NAME.clear();
+        if (!Files.exists(PROFILE_FILE)) return;
+
+        try (BufferedReader br = Files.newBufferedReader(PROFILE_FILE, StandardCharsets.UTF_8)) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // expected 10 fields in CSV format
+                String[] parts = line.split(",", 10);
+                if (parts.length == 10) {
+                    List<String> langs = List.of(parts[5].split("\\|"));
+                    StudentProfile sp = new StudentProfile(parts[0], parts[1], langs);
+                    sp.setAcademicStatus(parts[2]);
+                    sp.setEmployeed("Employed".equalsIgnoreCase(parts[3]));
+                    sp.setJobDetails(parts[4]);
+                    sp.setPreferredRole(parts[6]);
+                    sp.setComments(parts[7]);
+                    sp.setWhiteList(Boolean.parseBoolean(parts[8]));
+                    sp.setBlackList(Boolean.parseBoolean(parts[9]));
+                    NAME.add(sp);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
