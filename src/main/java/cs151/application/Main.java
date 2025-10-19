@@ -10,6 +10,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         DataStore.load();
+        DataStore.loadProfiles();
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(loader.load(), 320, 240);
         stage.setTitle("KnowledgeTrack Home");
@@ -20,6 +21,7 @@ public class Main extends Application {
     @Override
     public void stop() {
         DataStore.save();
+        DataStore.saveProfiles();
     }
 
     public static void main(String[] args) {
