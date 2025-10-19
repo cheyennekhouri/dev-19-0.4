@@ -31,6 +31,7 @@ public class StudentProfile  implements Comparable<StudentProfile> {
     }
 
     public StudentProfile(String name){
+        this();
         setName(name);
     }
     // Name

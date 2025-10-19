@@ -31,6 +31,7 @@ public class MainController {
     @FXML private RadioButton toggleButton;
     @FXML private TextField textField;
 
+    @FXML private TableColumn<StudentProfile, String> statusCol, empCol, roleCol;
     @FXML
     private ListView<String> multiSelectListView;
 
@@ -67,8 +68,14 @@ public class MainController {
         }
         if (nameTable != null && nameCol != null) {
             nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+            statusCol.setCellValueFactory(new PropertyValueFactory<>("academicStatus"));
+            empCol.setCellValueFactory(cell ->
+                    new javafx.beans.property.SimpleStringProperty(
+                            cell.getValue().isEmployed() ? "Employed" : "Not Employed"));
+            roleCol.setCellValueFactory(new PropertyValueFactory<>("preferredRole"));
             nameTable.setItems(DataStore.getFullName());
-            nameCol.prefWidthProperty().bind(nameTable.widthProperty().multiply(0.95));
+            nameTable.getItems().sort(java.util.Comparator.comparing(
+                    StudentProfile::getName, String.CASE_INSENSITIVE_ORDER));
         }
     }
 

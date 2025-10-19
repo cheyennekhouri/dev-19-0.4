@@ -151,6 +151,7 @@ public final class DataStore {
                 bw.newLine();
 
                 for (StudentProfile sp : NAME) {
+                    String langsJoined = (sp.getLanguages() == null) ? "" : String.join("|", sp.getLanguages());
                     String line = String.join(",",
                             csv(sp.getName()),
                             csv(sp.getMajor()),
