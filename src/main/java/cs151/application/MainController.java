@@ -25,6 +25,7 @@ public class MainController {
 
     @FXML private TableColumn<ProgrammingLanguages, String> langCol;
     @FXML private TableColumn<StudentProfile, String> nameCol;
+    @FXML private ListView<String> languagesList;
 
     @FXML
     private ListView<String> listView;
@@ -41,19 +42,23 @@ public class MainController {
     private void initialize() {
         if (tableView != null) {
             langCol.setCellValueFactory(new PropertyValueFactory<>("programmingLanguage"));
-
-            ObservableList<ProgrammingLanguages> langs = FXCollections.observableArrayList(DataStore.getList());
-            Comparator<ProgrammingLanguages> langComparator = Comparator.comparing
-                    (ProgrammingLanguages::getProgrammingLanguage, String.CASE_INSENSITIVE_ORDER);
-
-            langs.sort(langComparator);
-
+            ObservableList<ProgrammingLanguages> langs =
+                    FXCollections.observableArrayList(DataStore.getList());
+            langs.sort(Comparator.comparing(
+                    ProgrammingLanguages::getProgrammingLanguage, String.CASE_INSENSITIVE_ORDER));
             tableView.setItems(langs);
             langCol.prefWidthProperty().bind(tableView.widthProperty().multiply(0.5));
         }
+        if (languagesList != null) {
+            ObservableList<String> opts = FXCollections.observableArrayList(
+                    DataStore.getList().stream()
+                            .map(ProgrammingLanguages::getProgrammingLanguage).toList()
+            );
+            languagesList.setItems(opts);
+            languagesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        }
     }
 
-    //Sort names alphabetically (like initialize)
     @FXML
     private void initializeProf() {
         if (nameTable != null) {
