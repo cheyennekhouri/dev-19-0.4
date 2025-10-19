@@ -4,7 +4,7 @@
 
 # who did what:
 1. Sean Reece Calantoc: 
-2. Kanishka Yadav: Fixated StudentProfile.java (name, major, languages)
+2. Kanishka Yadav: Finalized StudentProfile.java with required fields
 3. Hoang Khang Pham:
 4. Cheyenne Khouri: Reorganized how application looks, created student profile and table, sorted the profiles alphabetically
 
